@@ -320,7 +320,7 @@
             const isLogin = loginForm.style.display === 'block';
             loginForm.style.display = isLogin ? 'none' : 'block';
             registerForm.style.display = isLogin ? 'block' : 'none';
-            toggleText.textContent = isLogin ? 'Already have an account? ' : 'Don't have an account? ';
+            toggleText.textContent = isLogin ? 'Already have an account? ' : "Don't have an account? ";
             toggleLink.textContent = isLogin ? 'Sign in' : 'Sign up';
             hideMessages();
         });

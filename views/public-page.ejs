@@ -1059,11 +1059,15 @@
             <% } %>
         </div>
         
+        <% if (user.showDownloadButton !== false || user.showPaymentDetails !== false) { %>
         <div class="qr-download-section">
             <div class="qr-buttons">
+                <% if (user.showDownloadButton !== false) { %>
                 <a href="/p/<%= user.uniqueSlug %>/download/dynamic-qr" download="dynamic-qr.png" class="download-btn">
                     <i class="fas fa-download"></i> Download Dynamic QR
                 </a>
+                <% } %>
+                <% if (user.showPaymentDetails !== false) { %>
                 <div class="payment-details-container">
                     <button class="payment-details-btn" onclick="togglePaymentDetails()">
                         <i class="fas fa-credit-card"></i> Payment Details
@@ -1098,8 +1102,10 @@
                         <% } %>
                     </div>
                 </div>
+                <% } %>
             </div>
         </div>
+        <% } %>
         
         <script>
             // Toggle payment details dropdown

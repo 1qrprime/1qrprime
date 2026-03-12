@@ -78,15 +78,14 @@ const connectDB = async () => {
         console.error('   💡 Check: MongoDB Atlas Network Access - add 0.0.0.0/0');
       }
       
-      // Don't exit in serverless environment
+      // Don't exit - allow server to run (login/DB features will fail, but pages load)
       if (process.env.VERCEL) {
         console.error('   ⚠️  Running in Vercel - will retry on next request');
       } else {
-        console.error('   ❌ Local development - exiting');
-        process.exit(1);
+        console.error('   ⚠️  Local dev: server will run but login/dashboard will fail until MongoDB connects');
       }
       
-      throw error;
+      return null; // Don't throw - allow server to stay up
     }
   })();
   

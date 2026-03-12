@@ -169,7 +169,7 @@ router.post('/update-profile', auth, upload.fields([{ name: 'logo', maxCount: 1 
       return res.status(403).json({ success: false, message: 'Authentication required' });
     }
 
-    const { businessName, phoneNumber, address, upiId, upiPayeeName, upiAid, paymentLink, showCallButton } = req.body;
+    const { businessName, phoneNumber, address, upiId, upiPayeeName, upiAid, paymentLink, showCallButton, showDownloadButton, showPaymentDetails } = req.body;
     const logoFile = req.files && req.files['logo'] ? req.files['logo'][0] : null;
     const bankQrCodeFile = req.files && req.files['bankQrCode'] ? req.files['bankQrCode'][0] : null;
     const user = await User.findById(req.user._id);
@@ -189,6 +189,20 @@ router.post('/update-profile', auth, upload.fields([{ name: 'logo', maxCount: 1 
     } else {
       // If checkbox is not in request (unchecked), set to false
       user.showCallButton = false;
+    }
+    
+    // Handle showDownloadButton checkbox
+    if (showDownloadButton !== undefined) {
+      user.showDownloadButton = showDownloadButton === 'true' || showDownloadButton === true || showDownloadButton === 'on';
+    } else {
+      user.showDownloadButton = false;
+    }
+    
+    // Handle showPaymentDetails checkbox
+    if (showPaymentDetails !== undefined) {
+      user.showPaymentDetails = showPaymentDetails === 'true' || showPaymentDetails === true || showPaymentDetails === 'on';
+    } else {
+      user.showPaymentDetails = false;
     }
     
     // Handle UPI ID - extract aid parameter if present in full URL

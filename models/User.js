@@ -35,6 +35,14 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  showDownloadButton: {
+    type: Boolean,
+    default: true
+  },
+  showPaymentDetails: {
+    type: Boolean,
+    default: true
+  },
   businessName: {
     type: String,
     default: ''

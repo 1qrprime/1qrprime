@@ -818,235 +818,16 @@ router.get('/:slug/redirect/:linkId', async (req, res) => {
       `);
     }
 
-    // For custom links, check menuType first
-    if (link.categoryType === 'custom') {
+    // Check for menu/bar/products/services/custom categories that have menu items or images
+    const menuCategories = ['menu', 'bar', 'products', 'services'];
+    const isMenuCategory = menuCategories.includes(link.category) || link.categoryType === 'custom';
+    
+    if (isMenuCategory) {
       const menuType = link.menuType || 'url';
       
-      // Custom links with 'url' type - redirect to URL (unless it's UPI, which is handled above)
-      if (menuType === 'url' && !isUPILink) {
-        return res.redirect(link.url);
-      }
-      
-      // Handle custom links with items type
+      // If menuType is 'items' and menuItems exist, show menu page
       if (menuType === 'items' && link.menuItems && link.menuItems.length > 0) {
-        const pageTitle = link.displayName || 'Custom';
-        return res.send(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${user.businessName || user.name} - ${pageTitle}</title>
-            <style>
-              * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }
-              body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                min-height: 100vh;
-                padding: 20px;
-              }
-              .container {
-                max-width: 800px;
-                margin: 0 auto;
-                background: white;
-                border-radius: 20px;
-                padding: 30px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-              }
-              .header {
-                text-align: center;
-                margin-bottom: 30px;
-              }
-              .header h1 {
-                color: #333;
-                font-size: 28px;
-                margin-bottom: 10px;
-              }
-              .header p {
-                color: #666;
-                font-size: 16px;
-              }
-              .menu-category {
-                margin-bottom: 30px;
-              }
-              .category-name {
-                color: #667eea;
-                font-size: 22px;
-                margin-bottom: 15px;
-                padding-bottom: 10px;
-                border-bottom: 2px solid #667eea;
-              }
-              .menu-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-              }
-              .menu-table th {
-                background: #667eea;
-                color: white;
-                padding: 12px;
-                text-align: left;
-                font-weight: 600;
-              }
-              .menu-table td {
-                padding: 12px;
-                border-bottom: 1px solid #eee;
-              }
-              .menu-table tr:hover {
-                background: #f5f5f5;
-              }
-              .price {
-                color: #667eea;
-                font-weight: 600;
-                font-size: 18px;
-              }
-              .back-button {
-                display: inline-block;
-                margin-top: 20px;
-                padding: 12px 24px;
-                background: #667eea;
-                color: white;
-                text-decoration: none;
-                border-radius: 8px;
-                transition: background 0.3s;
-              }
-              .back-button:hover {
-                background: #5568d3;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <h1>${user.businessName || user.name}</h1>
-                <p>${pageTitle}</p>
-              </div>
-              ${link.menuItems.map(category => `
-                <div class="menu-category">
-                  <h2 class="category-name">${category.categoryName}</h2>
-                  <table class="menu-table">
-                    <thead>
-                      <tr>
-                        <th>Item Name</th>
-                        <th>Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${category.items.map(item => `
-                        <tr>
-                          <td>${item.name}</td>
-                          <td class="price">₹${item.price.toFixed(2)}</td>
-                        </tr>
-                      `).join('')}
-                    </tbody>
-                  </table>
-                </div>
-              `).join('')}
-              <a href="/p/${user.uniqueSlug}" class="back-button">
-                <i class="fas fa-arrow-left"></i> Back to ${user.businessName || user.name}
-              </a>
-            </div>
-          </body>
-          </html>
-        `);
-      }
-      
-      // Handle custom links with images type
-      if (menuType === 'images' && link.menuCardImages && link.menuCardImages.length > 0) {
-        const pageTitle = link.displayName || 'Custom';
-        return res.send(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${user.businessName || user.name} - ${pageTitle}</title>
-            <style>
-              * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }
-              body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                min-height: 100vh;
-                padding: 20px;
-              }
-              .container {
-                max-width: 800px;
-                margin: 0 auto;
-                background: white;
-                border-radius: 20px;
-                padding: 30px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-              }
-              .header {
-                text-align: center;
-                margin-bottom: 30px;
-              }
-              .header h1 {
-                color: #333;
-                font-size: 28px;
-                margin-bottom: 10px;
-              }
-              .header p {
-                color: #666;
-                font-size: 16px;
-              }
-              .menu-images {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-              }
-              .menu-image {
-                width: 100%;
-                height: auto;
-                border-radius: 10px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-              }
-              .back-button {
-                display: inline-block;
-                margin-top: 20px;
-                padding: 12px 24px;
-                background: #667eea;
-                color: white;
-                text-decoration: none;
-                border-radius: 8px;
-                transition: background 0.3s;
-              }
-              .back-button:hover {
-                background: #5568d3;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <h1>${user.businessName || user.name}</h1>
-                <p>${pageTitle}</p>
-              </div>
-              <div class="menu-images">
-                ${link.menuCardImages.map((image, index) => 
-                  `<img src="${image}" alt="${pageTitle} ${index + 1}" class="menu-image">`
-                ).join('')}
-              </div>
-              <a href="/p/${user.uniqueSlug}" class="back-button">
-                <i class="fas fa-arrow-left"></i> Back to ${user.businessName || user.name}
-              </a>
-            </div>
-          </body>
-          </html>
-        `);
-      }
-      
-      // Display menu/items in table format (for menu/bar/products/services)
-      if (menuType === 'items' && link.menuItems && link.menuItems.length > 0) {
-        const pageTitle = link.category === 'bar' ? 'Bar' : (link.category === 'products' ? 'Products' : (link.category === 'services' ? 'Services' : 'Menu'));
+        const pageTitle = link.displayName || (link.category === 'bar' ? 'Bar' : (link.category === 'products' ? 'Products' : (link.category === 'services' ? 'Services' : (link.categoryType === 'custom' ? 'Custom' : 'Menu'))));
         return res.send(`
           <!DOCTYPE html>
           <html>
@@ -1181,7 +962,7 @@ router.get('/:slug/redirect/:linkId', async (req, res) => {
           </head>
           <body>
             <div class="menu-container">
-              <h1 class="menu-title">${link.displayName || (link.category === 'bar' ? 'Bar' : (link.category === 'products' ? 'Products' : (link.category === 'services' ? 'Services' : 'Menu')))}</h1>
+              <h1 class="menu-title">${pageTitle}</h1>
               ${link.menuItems.map(category => `
                 <div class="menu-category">
                   <h2 class="category-name">${category.categoryName}</h2>
@@ -1212,17 +993,16 @@ router.get('/:slug/redirect/:linkId', async (req, res) => {
         `);
       }
       
-      // Display menu card images (fallback to images if menuType is images)
-      // Products and services don't support images, only items
-      // Custom links with images type are handled above
-      if (menuType === 'images' && link.category === 'menu' && link.menuCardImages && link.menuCardImages.length > 0) {
+      // If menuType is 'images' and menuCardImages exist, show images page
+      if (menuType === 'images' && link.menuCardImages && link.menuCardImages.length > 0) {
+        const pageTitle = link.displayName || (link.category === 'bar' ? 'Bar' : (link.category === 'products' ? 'Products' : (link.category === 'services' ? 'Services' : (link.categoryType === 'custom' ? 'Custom' : 'Menu'))));
         return res.send(`
           <!DOCTYPE html>
           <html>
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${user.businessName || user.name} - Menu</title>
+            <title>${user.businessName || user.name} - ${pageTitle}</title>
             <style>
               * {
                 margin: 0;
@@ -1283,10 +1063,10 @@ router.get('/:slug/redirect/:linkId', async (req, res) => {
           </head>
           <body>
             <div class="menu-container">
-              <h1 class="menu-title">${link.displayName || 'Menu'}</h1>
+              <h1 class="menu-title">${pageTitle}</h1>
               <div class="menu-images-container">
                 ${link.menuCardImages.map((image, index) => 
-                  `<img src="${image}" alt="Menu Card ${index + 1}" class="menu-image">`
+                  `<img src="${image}" alt="${pageTitle} ${index + 1}" class="menu-image">`
                 ).join('')}
               </div>
               <a href="/p/${user.uniqueSlug}" class="back-button">
@@ -1297,10 +1077,39 @@ router.get('/:slug/redirect/:linkId', async (req, res) => {
           </html>
         `);
       }
+      
+      // For custom links with 'url' type - redirect to URL only if URL exists and is not empty
+      // If URL is empty but menu items/images exist, they will be shown by the checks above
+      if (link.categoryType === 'custom' && menuType === 'url' && !isUPILink) {
+        if (link.url && link.url.trim() !== '') {
+          return res.redirect(link.url);
+        } else {
+          // If URL is empty, check if we have menu items or images to show
+          // If menu items exist, they should have been handled by the items check above
+          // If menu images exist, they should have been handled by the images check above
+          // If neither exists, show an error
+          return res.status(400).send('No URL or menu content available. Please add a URL or create menu items/images.');
+        }
+      }
+      
+      // For menu/bar/products/services with 'url' type but no URL - check if items/images exist
+      if (menuCategories.includes(link.category) && menuType === 'url') {
+        if (link.url && link.url.trim() !== '') {
+          return res.redirect(link.url);
+        } else {
+          // If URL is empty but menu items/images exist, they should have been shown above
+          // If not, show an error
+          return res.status(400).send('No URL provided. Please add a URL or create menu items/images.');
+        }
+      }
     }
 
-    // For regular links, redirect normally
-    res.redirect(link.url);
+    // For regular links, redirect normally only if URL exists and is not empty
+    if (link.url && link.url.trim() !== '') {
+      return res.redirect(link.url);
+    } else {
+      return res.status(400).send('No URL provided for this link');
+    }
   } catch (error) {
     console.error('Redirect error:', error);
     res.status(500).send('Error redirecting');
