@@ -1786,57 +1786,5 @@
         }
     </script>
 
-    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; color: #666; font-size: 12px;">
-        <div style="display: flex; justify-content: center; align-items: center; width: 100%; flex-wrap: wrap; gap: 12px;">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span style="color: #ffffff;">Built by</span>
-                <a href="https://aideveloperindia.store" target="_blank" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #ffffff;">
-                    <img src="/images/A-logo-transparent.png" alt="AI Developer India" style="height: 20px; width: auto; display: block;">
-                    <span>AI Developer India</span>
-                </a>
-                    </div>
-            <!-- HIDDEN FOR NOW - Website Statistics feature (kept as module for future use) -->
-            <div class="footer-stats" id="footerStats" style="display: none;">
-                <div class="footer-stat-item" style="color: #666; font-size: 12px;">
-                    <span class="stat-label" style="font-size: 12px; opacity: 0.7; margin-right: 6px;">Users:</span>
-                    <span class="stat-value" id="footerUsersCount" style="font-weight: 600; color: #4CAF50; font-size: 12px;">-</span>
-                    </div>
-                <div class="footer-stat-item" style="color: #666; font-size: 12px;">
-                    <span class="stat-label" style="font-size: 12px; opacity: 0.7; margin-right: 6px;">Clients:</span>
-                    <span class="stat-value" id="footerClientsCount" style="font-weight: 600; color: #4CAF50; font-size: 12px;">-</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Load footer statistics
-        async function loadFooterStats() {
-            try {
-                const response = await fetch('/p/api/settings');
-                const data = await response.json();
-                
-                if (data.success) {
-                    const usersEl = document.getElementById('footerUsersCount');
-                    const clientsEl = document.getElementById('footerClientsCount');
-                    if (usersEl) usersEl.textContent = data.usersCount.toLocaleString('en-IN') || '0';
-                    if (clientsEl) clientsEl.textContent = data.clientsCount.toLocaleString('en-IN') || '0';
-                }
-            } catch (error) {
-                console.error('Error loading footer stats:', error);
-                const usersEl = document.getElementById('footerUsersCount');
-                const clientsEl = document.getElementById('footerClientsCount');
-                if (usersEl) usersEl.textContent = '0';
-                if (clientsEl) clientsEl.textContent = '0';
-            }
-        }
-
-        // Load footer stats on page load
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadFooterStats);
-        } else {
-            loadFooterStats();
-        }
-    </script>
 </body>
 </html>

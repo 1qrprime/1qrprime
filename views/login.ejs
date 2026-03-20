@@ -80,92 +80,6 @@
             font-size: 20px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            color: #ccc;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 16px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #fff;
-        }
-
-        .divider {
-            margin: 25px 0;
-            text-align: center;
-            color: #666;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: #333;
-        }
-
-        .divider::before {
-            left: 0;
-        }
-
-        .divider::after {
-            right: 0;
-        }
-
-        .btn-primary {
-            background: #4CAF50;
-            color: white;
-            padding: 14px 24px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-        }
-
-        .toggle-form {
-            margin-top: 20px;
-            color: #888;
-            font-size: 14px;
-        }
-
-        .toggle-form a {
-            color: #4CAF50;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .toggle-form a:hover {
-            text-decoration: underline;
-        }
-
         .error-message {
             background: #ff4444;
             color: white;
@@ -212,118 +126,15 @@
         <div id="errorMsg" class="error-message" style="display: none;"></div>
         <div id="successMsg" class="success-message" style="display: none;"></div>
 
-        <!-- Login Form -->
-        <form id="loginForm" style="display: block;">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required placeholder="Enter your password">
-            </div>
-            <button type="submit" class="btn-primary">Sign In</button>
-        </form>
-
-        <!-- Register Form -->
-        <form id="registerForm" style="display: none;">
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="name" required placeholder="Your Name">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="tel" name="phoneNumber" required placeholder="+91 9876543210">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required placeholder="Min 6 characters" minlength="6">
-            </div>
-            <button type="submit" class="btn-primary">Create Account</button>
-        </form>
-
-        <div class="divider">OR</div>
-        
         <a href="/auth/google" class="google-btn">
             <i class="fab fa-google"></i>
             Continue with Google
         </a>
-
-        <div class="toggle-form">
-            <span id="toggleText">Don't have an account? </span>
-            <a href="#" id="toggleLink">Sign up</a>
-        </div>
-
-        <div class="footer" style="position: relative;">
-            <div style="display: flex; justify-content: center; align-items: center; width: 100%; flex-wrap: wrap; gap: 12px;">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px;">
-                    <span style="color: #ffffff;">Built by</span>
-                    <a href="https://aideveloperindia.store" target="_blank" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #ffffff;">
-                        <img src="/images/A-logo-transparent.png" alt="AI Developer India" style="height: 20px; width: auto; display: block;">
-                        <span>AI Developer India</span>
-                    </a>
-                </div>
-                <!-- HIDDEN FOR NOW - Website Statistics feature (kept as module for future use) -->
-                <div class="footer-stats" id="footerStats" style="display: none;">
-                    <div class="footer-stat-item" style="color: #888; font-size: 12px;">
-                        <span class="stat-label" style="font-size: 12px; opacity: 0.7; margin-right: 6px;">Users:</span>
-                        <span class="stat-value" id="footerUsersCount" style="font-weight: 600; color: #4CAF50; font-size: 12px;">-</span>
-                    </div>
-                    <div class="footer-stat-item" style="color: #888; font-size: 12px;">
-                        <span class="stat-label" style="font-size: 12px; opacity: 0.7; margin-right: 6px;">Clients:</span>
-                        <span class="stat-value" id="footerClientsCount" style="font-weight: 600; color: #4CAF50; font-size: 12px;">-</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script>
-            async function loadFooterStats() {
-                try {
-                    const response = await fetch('/p/api/settings');
-                    const data = await response.json();
-                    if (data.success) {
-                        const usersEl = document.getElementById('footerUsersCount');
-                        const clientsEl = document.getElementById('footerClientsCount');
-                        if (usersEl) usersEl.textContent = data.usersCount.toLocaleString('en-IN') || '0';
-                        if (clientsEl) clientsEl.textContent = data.clientsCount.toLocaleString('en-IN') || '0';
-                    }
-                } catch (error) {
-                    const usersEl = document.getElementById('footerUsersCount');
-                    const clientsEl = document.getElementById('footerClientsCount');
-                    if (usersEl) usersEl.textContent = '0';
-                    if (clientsEl) clientsEl.textContent = '0';
-                }
-            }
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', loadFooterStats);
-            } else {
-                loadFooterStats();
-            }
-        </script>
     </div>
 
     <script>
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const toggleLink = document.getElementById('toggleLink');
-        const toggleText = document.getElementById('toggleText');
         const errorMsg = document.getElementById('errorMsg');
         const successMsg = document.getElementById('successMsg');
-
-        // Toggle between login and register
-        toggleLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const isLogin = loginForm.style.display === 'block';
-            loginForm.style.display = isLogin ? 'none' : 'block';
-            registerForm.style.display = isLogin ? 'block' : 'none';
-            toggleText.textContent = isLogin ? 'Already have an account? ' : "Don't have an account? ";
-            toggleLink.textContent = isLogin ? 'Sign in' : 'Sign up';
-            hideMessages();
-        });
 
         function showError(msg) {
             errorMsg.textContent = msg;
@@ -331,115 +142,38 @@
             successMsg.style.display = 'none';
         }
 
-        function showSuccess(msg) {
-            successMsg.textContent = msg;
-            successMsg.style.display = 'block';
-            errorMsg.style.display = 'none';
-        }
-
-        function hideMessages() {
-            errorMsg.style.display = 'none';
-            successMsg.style.display = 'none';
-        }
-
-        // Login form submission
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            hideMessages();
-            
-            const formData = new FormData(loginForm);
-            const data = {
-                email: formData.get('email'),
-                password: formData.get('password')
-            };
-
-            try {
-                const response = await fetch('/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    showSuccess('Login successful! Redirecting...');
-                    setTimeout(() => window.location.href = '/dashboard', 1000);
-                } else {
-                    showError(result.message || 'Login failed');
-                }
-            } catch (error) {
-                showError('Network error. Please try again.');
-            }
-        });
-
-        // Register form submission
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            hideMessages();
-            
-            const formData = new FormData(registerForm);
-            const data = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                phoneNumber: formData.get('phoneNumber'),
-                password: formData.get('password')
-            };
-
-            try {
-                const response = await fetch('/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify(data)
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    showSuccess('Registration successful! Please complete your profile...');
-                    setTimeout(() => window.location.href = '/complete-profile', 1000);
-                } else {
-                    showError(result.message || 'Registration failed');
-                }
-            } catch (error) {
-                showError('Network error. Please try again.');
-            }
-        });
-
         // Check for URL error parameters
         const urlParams = new URLSearchParams(window.location.search);
         const error = urlParams.get('error');
-        const errorMsg = urlParams.get('msg');
+        const urlErrorMsg = urlParams.get('msg');
         
         if (error) {
             let errorMessage = 'Authentication failed. ';
             
             switch(error) {
                 case 'auth_error':
-                    errorMessage = errorMsg ? decodeURIComponent(errorMsg) : 'Google authentication error. Please try again.';
+                    errorMessage = urlErrorMsg ? decodeURIComponent(urlErrorMsg) : 'Google authentication error. Please try again.';
                     break;
                 case 'no_user':
                     errorMessage = 'Unable to create account. Please try again or contact support.';
                     break;
                 case 'login_error':
-                    errorMessage = errorMsg ? decodeURIComponent(errorMsg) : 'Login failed. Please try again.';
+                    errorMessage = urlErrorMsg ? decodeURIComponent(urlErrorMsg) : 'Login failed. Please try again.';
                     break;
                 case 'save_error':
                     errorMessage = 'Session error. Please try logging in again.';
                     break;
                 case 'config_error':
-                    errorMessage = errorMsg ? decodeURIComponent(errorMsg) : 'Google OAuth is not configured. Please contact support.';
+                    errorMessage = urlErrorMsg ? decodeURIComponent(urlErrorMsg) : 'Google OAuth is not configured. Please contact support.';
                     break;
                 case 'strategy_error':
-                    errorMessage = errorMsg ? decodeURIComponent(errorMsg) : 'Google OAuth is not available. Please contact support.';
+                    errorMessage = urlErrorMsg ? decodeURIComponent(urlErrorMsg) : 'Google OAuth is not available. Please contact support.';
                     break;
                 case 'db_error':
-                    errorMessage = errorMsg ? decodeURIComponent(errorMsg) : 'Database connection failed. Please try again.';
+                    errorMessage = urlErrorMsg ? decodeURIComponent(urlErrorMsg) : 'Database connection failed. Please try again.';
                     break;
                 case 'unexpected_error':
-                    errorMessage = errorMsg ? decodeURIComponent(errorMsg) : 'An unexpected error occurred. Please try again.';
+                    errorMessage = urlErrorMsg ? decodeURIComponent(urlErrorMsg) : 'An unexpected error occurred. Please try again.';
                     break;
                 default:
                     errorMessage = 'Authentication failed. Please try again.';
